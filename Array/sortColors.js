@@ -4,7 +4,36 @@
  * 我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色
  */
 
-function sortColors(nums) {
+// 元素较少，可以考虑计数排序
+function sortColors1(nums) {
+  var n = nums.length,
+    zero = 0,
+    one = 0,
+    two = 0,
+    index = 0;
+
+  // 遍历一遍找出 0，1，2 出现的频率
+  for (var i = 0; i < n; i++) {
+    if (nums[i] === 0) zero++;
+    if (nums[i] === 1) one++;
+    if (nums[i] === 2) two++;
+  }
+
+  for (var i = 0; i < zero; i++) {
+    nums[index++] = 0;
+  }
+
+  for (var i = 0; i < one; i++) {
+    nums[index++] = 1;
+  }
+
+  for (var i = 0; i < two; i++) {
+    nums[index++] = 2;
+  }
+}
+
+// 类似三路快排，将数组拆分为 [0...1], [1...1], [1...2]
+function sortColors2(nums) {
   var n = nums.length;
 
   // nums[0...zero] = 0, nums[two...n-1] = 2

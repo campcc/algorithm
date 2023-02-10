@@ -5,12 +5,14 @@
  * 最终，合并后数组不应由函数返回，而是存储在数组 nums1 中
  */
 
+// 将数组 nums2 放进 nums1 的尾部，然后对 nums1 进行排序
 function mergeSortedArray1(nums1, m, nums2, n) {
   nums1.splice(m, nums1.length - m, ...nums2);
   nums1.sort((a, b) => a - b);
   return nums1;
 }
 
+// 用额外的 O(n) 空间存放已排序元素，依次将 nums1，nums2 元素放进数组，最后赋值给 nums1
 function mergeSortedArray2(nums1, m, nums2, n) {
   var i = 0,
     j = 0,
@@ -38,6 +40,7 @@ function mergeSortedArray2(nums1, m, nums2, n) {
   return nums1;
 }
 
+// 用尾指针进行遍历，将较大的元素依次插入 nums1
 function mergeSortedArray3(nums1, m, nums2, n) {
   var i = m - 1,
     j = n - 1,
@@ -49,12 +52,12 @@ function mergeSortedArray3(nums1, m, nums2, n) {
       cur = nums2[j--];
     } else if (j < 0) {
       cur = nums1[i--];
-    } else if (nums1[i] < nums2[i]) {
+    } else if (nums1[i] < nums2[j]) {
+      cur = nums2[j--];
+    } else {
+      cur = nums1[i--];
     }
+
+    nums1[tail--] = cur;
   }
 }
-
-var nums1 = [1, 2, 3, 0, 0, 0];
-var nums2 = [2, 5, 6];
-var res = mergeSortedArray2(nums1, 3, nums2, 3);
-console.log(res);
