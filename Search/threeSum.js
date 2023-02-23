@@ -51,5 +51,3 @@ function threeSum1(nums) {
 
   return res;
 }
-
-console.log(threeSum1([-1, 0, 1, 2, -1, -4]));
