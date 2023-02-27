@@ -1,3 +1,5 @@
+const { createLinkedList, printLinkedList } = require("./ListNode");
+
 /**
  * 给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。
  */
@@ -41,3 +43,7 @@ function reverseList(head) {
 
   return cur;
 }
+
+var list = [1, 2, 3, 4, 5];
+var head = createLinkedList(list);
+printLinkedList(reverseList(head));
