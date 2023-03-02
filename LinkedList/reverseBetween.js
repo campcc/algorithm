@@ -23,10 +23,10 @@ function reverseBetween(head, left, right) {
   }
 
   for (var i = 0; i < right - left; i++) {
-    var next = cur.next;
-    cur.next = cur.next.next;
-    next.next = pre.next;
-    pre.next = next;
+    var removed = cur.next;
+    cur.next = removed.next;
+    removed.next = pre.next;
+    pre.next = removed;
   }
 
   return dummy.next;
