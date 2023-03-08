@@ -90,3 +90,41 @@ function levelOrder(root) {
 
   return res;
 }
+
+// 变种1：要求返回自底向上的层序遍历结果
+// 这里有两种思路，一种是我们将层序遍历的结果集直接反转，或者在加入结果集时往数组头部插入
+function levelOrderBottom(root) {
+  if (root === null) {
+    return [];
+  }
+
+  var res = [],
+    queue = [];
+
+  queue.push(root);
+
+  while (queue.length) {
+    var size = queue.length,
+      temp = [];
+
+    var i = 0;
+    while (i < size) {
+      var node = queue.shift();
+      temp.push(node.val);
+
+      if (node.left) {
+        queue.push(node.left);
+      }
+
+      if (node.right) {
+        queue.push(node.right);
+      }
+
+      i++;
+    }
+
+    res.unshift(temp);
+  }
+
+  return res;
+}
