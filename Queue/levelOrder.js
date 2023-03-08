@@ -128,3 +128,50 @@ function levelOrderBottom(root) {
 
   return res;
 }
+
+// 变种2：要求返回锯齿形的层序遍历结果
+// 即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行
+// 这里我们可以在每层遍历时加一个布尔值变量来判断是需要将节点加入数组末尾还是头部
+function zigzagLevelOrder(root) {
+  if (root === null) {
+    return [];
+  }
+
+  var res = [],
+    queue = [];
+
+  queue.push(root);
+
+  var isPushBack = true;
+
+  while (queue.length) {
+    var size = queue.length,
+      temp = [];
+
+    var i = 0;
+    while (i < size) {
+      var node = queue.shift();
+      if (isPushBack) {
+        temp.push(node.val);
+      } else {
+        temp.unshift(node.val);
+      }
+
+      if (node.left) {
+        queue.push(node.left);
+      }
+
+      if (node.right) {
+        queue.push(node.right);
+      }
+
+      i++;
+    }
+
+    res.push(temp);
+
+    isPushBack = !isPushBack;
+  }
+
+  return res;
+}
