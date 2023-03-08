@@ -175,3 +175,41 @@ function zigzagLevelOrder(root) {
 
   return res;
 }
+
+// 变种3：想象你站在一颗二叉树的右侧，返回所有你能看见的节点
+// 我们仍使用层序遍历，只是在加入结果集时，只加入数组的最后一个元素
+function rightSideView(root) {
+  if (root === null) {
+    return [];
+  }
+
+  var res = [],
+    queue = [];
+
+  queue.push(root);
+
+  while (queue.length) {
+    var size = queue.length,
+      temp = [];
+
+    var i = 0;
+    while (i < size) {
+      var node = queue.shift();
+      temp.push(node.val);
+
+      if (node.left) {
+        queue.push(node.left);
+      }
+
+      if (node.right) {
+        queue.push(node.right);
+      }
+
+      i++;
+    }
+
+    res.push(temp.pop());
+  }
+
+  return res;
+}
