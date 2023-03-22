@@ -162,3 +162,38 @@ function getPath(node, map) {
 
   return path;
 }
+
+// 变种1: 如果路径不限制从根节点开始, 到叶子节点结束, 而是任意的节点路径
+// 路径只能向下走, 返回满足条件的路径数目
+// 考虑三种情况,
+// 1. 以 root 为根节点的二叉树中, 包含 root 节点且和为 sum 的路径
+// 2. root 左子树中和为 sum 的路径
+// 2. root 右子树中和为 sum 的路径
+function pathSum(root, targetSum) {
+  if (root === null) {
+    return 0;
+  }
+
+  const findPath = (node, sum) => {
+    if (node === null) {
+      return 0;
+    }
+
+    var res = 0;
+
+    if (node.val === sum) {
+      res += 1;
+    }
+
+    res += findPath(node.left, sum - node.val);
+    res += findPath(node.right, sum - node.val);
+
+    return res;
+  };
+
+  var res = findPath(root, targetSum);
+  res += pathSum(root.left, targetSum);
+  res += pathSum(root.right, targetSum);
+
+  return res;
+}
