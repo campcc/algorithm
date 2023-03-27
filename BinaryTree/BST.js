@@ -33,6 +33,41 @@ function lowestCommonAncestor(root, p, q) {
   return root;
 }
 
+// 变种1: 如果给定的是一个普通二叉树, 如何找到该树中两个指定节点的最近公共祖先
+// 我们可以用哈希表存储所有节点的父节点,
+// 然后从 p 开始不断访问并记录其父节点, 在从 q 开始不断访问其父节点, 如果父节点已被 p 访问过, 返回结果
+function lowestCommonAncestor(root, p, q) {
+  var parent = new Map(),
+    visited = new Map();
+
+  const dfs = (root) => {
+    if (root.left) {
+      parent.set(root.left.val, root);
+      dfs(root.left);
+    }
+    if (root.right) {
+      parent.set(root.right.val, root);
+      dfs(root.right);
+    }
+  };
+
+  dfs(root);
+
+  while (p) {
+    visited.set(p.val, true);
+    p = parent.get(p.val);
+  }
+
+  while (q) {
+    if (visited.has(q.val)) {
+      return q;
+    }
+    q = parent.get(q.val);
+  }
+
+  return null;
+}
+
 // Q2: 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树
 // 先判断当前节点，然后递归判断子节点
 function isValidBST(root) {
@@ -148,4 +183,57 @@ function sortedArrayToBST(nums) {
   };
 
   return build(nums, 0, nums.length - 1);
+}
+
+// Q5: 给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）
+// 维护一个中序遍历的数组, 返回数组的第 k-1 个元素
+function kthSmallest(root, k) {
+  if (root === null) {
+    return null;
+  }
+
+  var stack = [],
+    res = [];
+
+  stack.push(root);
+
+  while (root || stack.length) {
+    while (root) {
+      stack.push(root);
+      root = root.left;
+    }
+    root = stack.pop();
+    res.push(root.val);
+    root = root.right;
+  }
+
+  return res[k - 1];
+}
+
+// 我们也可以不维护数组, 在遍历时遇到第 k - 1 个元素直接返回
+function kthSmallest(root, k) {
+  if (root === null) {
+    return null;
+  }
+
+  var stack = [];
+
+  stack.push(root);
+
+  while (root || stack.length) {
+    while (root) {
+      stack.push(root);
+      root = root.left;
+    }
+
+    root = stack.pop();
+
+    k--;
+
+    if (k === 0) {
+      return root.val;
+    }
+
+    root = root.right;
+  }
 }
