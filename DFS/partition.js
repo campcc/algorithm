@@ -69,6 +69,7 @@ function partition(s) {
   return res;
 }
 
+// 双指针判断回文字符串
 function isPalindrome(s, i, j) {
   while (i < j) {
     if (s[i] !== s[j]) {
@@ -77,6 +78,28 @@ function isPalindrome(s, i, j) {
     i++;
     j--;
   }
+  return true;
+}
+
+// 优化：在判断回文字符串的时候我们可以应用记忆化搜索，使用哈希表缓存回文字符串的判断结果
+// 哈希表的键可以设置为起始结束索引拼接的字符串
+function isPalindrome(s, i, j, map) {
+  var key = i + "" + j;
+
+  if (map.has(key)) {
+    return map.get(key);
+  }
+
+  while (i < j) {
+    if (s[i] !== s[j]) {
+      map.set(key, false);
+      return false;
+    }
+    i++;
+    j--;
+  }
+
+  map.set(key, true);
   return true;
 }
 
