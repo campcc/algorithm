@@ -11,7 +11,7 @@
 function combinationSum(candidates, target) {
   var res = [];
 
-  const dfs = (paths, index, target) => {
+  var dfs = (paths, index, target) => {
     if (target === 0) {
       res.push(paths.slice());
       return;
@@ -51,7 +51,7 @@ function combinationSum2(candidates, target) {
 
   candidates.sort((a, b) => a - b);
 
-  const dfs = (paths, index, target) => {
+  var dfs = (paths, index, target) => {
     if (target === 0) {
       res.push(paths.slice());
       return;
@@ -85,7 +85,7 @@ console.log(combinationSum2([2, 5, 2, 1, 2], 5));
 function combinationSum3(k, n) {
   var res = [];
 
-  const dfs = (paths, index, n) => {
+  var dfs = (paths, index, n) => {
     if (n === 0 && paths.length === k) {
       res.push(paths.slice());
       return;
