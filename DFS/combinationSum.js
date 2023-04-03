@@ -66,7 +66,7 @@ function combinationSum2(candidates, target) {
 
       if (rest >= 0) {
         paths.push(candidates[i]);
-        dfs(paths, i + 1, target - candidates[i]);
+        dfs(paths, i + 1, rest);
         paths.pop();
       }
     }
@@ -78,3 +78,33 @@ function combinationSum2(candidates, target) {
 }
 
 console.log(combinationSum2([2, 5, 2, 1, 2], 5));
+
+// 变种2: 在 1-9 这 9 个数字中，选出 k 个数字，每个数字只能使用一次，使得和为 n
+// 2 <= k <= 9
+// 1 <= n <= 60
+function combinationSum3(k, n) {
+  var res = [];
+
+  const dfs = (paths, index, n) => {
+    if (n === 0 && paths.length === k) {
+      res.push(paths.slice());
+      return;
+    }
+
+    for (var i = index; i <= 9; i++) {
+      var rest = n - i;
+
+      if (rest >= 0) {
+        paths.push(i);
+        dfs(paths, i + 1, rest);
+        paths.pop();
+      }
+    }
+  };
+
+  dfs([], 1, n);
+
+  return res;
+}
+
+console.log(combinationSum3(3, 9));
