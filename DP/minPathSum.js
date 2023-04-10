@@ -31,7 +31,7 @@ function minPathSum(grid) {
       return;
     }
 
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < direction.length; i++) {
       var newX = x + direction[i][0];
       var newY = y + direction[i][1];
       if (inArea(newX, newY)) {
@@ -48,42 +48,46 @@ function minPathSum(grid) {
 }
 
 // 递归，记忆化搜索
-// 不难发现，上述递归过程中存在大量的 [x, y] 路径和，我们可以考虑用记忆化搜索进行剪枝
+// 上述代码提交到 LeetCode 会超时，因为递归过程中存在大量的 [x, y] 路径和，我们可以考虑用记忆化搜索进行剪枝
 // 我们调整下 dfs 定义，返回当前 [x, y] 的最小路径和
 function minPathSum(grid) {
-  var m = grid.length,
-    n = grid[0].length,
-    memo = new Array(m),
-    direction = [
-      [0, 1],
-      [1, 0],
-    ];
-
-  for (var i = 0; i < m; i++) {
-    memo[i] = new Array(n);
+  if (grid.length === 0) {
+    return 0;
   }
 
-  var inArea = function (x, y) {
+  var m = grid.length,
+    n = grid[0].length,
+    direction = [
+      [1, 0],
+      [0, 1],
+    ],
+    memo = new Array(m);
+
+  for (var i = 0; i < m; i++) {
+    memo[i] = new Array(n).fill(-1);
+  }
+
+  var inArea = (x, y) => {
     return x >= 0 && y >= 0 && x < m && y < n;
   };
 
-  // 寻找 [x, y] 的最小路径和
-  var dfs = function (x, y) {
+  var dfs = (x, y) => {
     if (x === m - 1 && y === n - 1) {
       return grid[x][y];
     }
 
-    if (memo[x][y]) {
+    if (memo[x][y] !== -1) {
       return memo[x][y];
     }
 
     var res = Number.MAX_SAFE_INTEGER;
-
     for (var i = 0; i < direction.length; i++) {
       var newX = x + direction[i][0];
-      var newY = y + direction[i][0];
+      var newY = y + direction[i][1];
       if (inArea(newX, newY)) {
-        res = Math.min(res, dfs(newX, newY));
+        // 计算后续节点的最小路径和
+        var childRes = dfs(newX, newY);
+        res = Math.min(childRes, res);
       }
     }
 
@@ -100,43 +104,43 @@ function minPathSum(grid) {
 // 1.对于第一行的最小路径和，方向是固定的从左到右
 // 2.对于第一列的最小路径和，方向是固定的从上到下
 // 3.对于其他位置，最小路径和为向左或向下路径和中最小的值加上当前元素值
-// function minPathSum(grid) {
-//   var m = grid.length;
+function minPathSum(grid) {
+  var m = grid.length;
 
-//   if (m === 0) {
-//     return 0;
-//   }
+  if (m === 0) {
+    return 0;
+  }
 
-//   var n = grid[0].length,
-//     dp = new Array(m);
+  var n = grid[0].length,
+    dp = new Array(m);
 
-//   for (var i = 0; i < m; i++) {
-//     dp[i] = new Array(n);
-//   }
+  for (var i = 0; i < m; i++) {
+    dp[i] = new Array(n);
+  }
 
-//   dp[0][0] = grid[0][0];
+  dp[0][0] = grid[0][0];
 
-//   for (var i = 0; i < m; i++) {
-//     for (var j = 0; j < n; j++) {
-//       // 第一行
-//       if (i === 0 && j > 0) {
-//         dp[0][j] = dp[0][j - 1] + grid[0][j];
-//       }
+  for (var i = 0; i < m; i++) {
+    for (var j = 0; j < n; j++) {
+      // 第一行
+      if (i === 0 && j > 0) {
+        dp[0][j] = dp[0][j - 1] + grid[0][j];
+      }
 
-//       // 第一列
-//       if (j === 0 && i > 0) {
-//         dp[i][0] = dp[i - 1][0] + grid[i][0];
-//       }
+      // 第一列
+      if (j === 0 && i > 0) {
+        dp[i][0] = dp[i - 1][0] + grid[i][0];
+      }
 
-//       // 其他情况
-//       if (i > 0 && j > 0) {
-//         dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
-//       }
-//     }
-//   }
+      // 其他情况
+      if (i > 0 && j > 0) {
+        dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+      }
+    }
+  }
 
-//   return dp[m - 1][n - 1];
-// }
+  return dp[m - 1][n - 1];
+}
 
 console.log(
   minPathSum([
