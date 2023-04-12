@@ -4,33 +4,64 @@
  * 你必须设计并实现时间复杂度为 O(n) 的算法解决此问题
  */
 
+// 排序后查找
 function findKthLargest(nums, k) {
   nums.sort((a, b) => b - a);
   return nums[k];
 }
 
-// 快排
-function findKthLargest(nums, k) {}
+// 构建最大堆，然后依次删除堆顶元素
+function findKthLargest(nums, k) {
+  nums.unshift(null);
 
-// 找到下一个基准
-function partition(nums, left, right) {
-  var pivotIndex = left;
-  var pivot = nums[right];
+  var n = nums.length;
 
-  for (var i = left; i < right; i++) {
-    if (nums[i] < pivot) {
-      swap(nums, i, pivotIndex);
-      pivotIndex++;
-    }
+  // 构建最大堆
+  // 堆顶元素为最大元素，删除堆顶元素后为第二大，再次删除堆顶后为第三大...以此类推，第 k 大元素我们需要删除堆顶元素 k - 1 次
+  var heap = buildHeap(nums, n);
+
+  for (var i = 1; i < k; i++) {
+    removeTop(heap);
   }
 
-  swap(nums, pivotIndex, right);
-
-  return pivotIndex;
+  return heap[1];
 }
 
-function swap(nums, i, j) {
-  var temp = nums[i];
-  nums[i] = nums[j];
-  nums[j] = temp;
+function buildHeap(a, n) {
+  for (var i = Math.floor(n / 2); i >= 1; i--) {
+    heapify(a, n, i);
+  }
+
+  return a;
+}
+
+function heapify(a, n, i) {
+  while (true) {
+    var maxPos = i;
+
+    if (i * 2 <= n && a[maxPos] < a[i * 2]) maxPos = i * 2;
+    if (i * 2 + 1 <= n && a[maxPos] < a[i * 2 + 1]) maxPos = i * 2 + 1;
+
+    if (maxPos === i) break;
+
+    swap(a, i, maxPos);
+
+    i = maxPos;
+  }
+}
+
+function removeTop(heap) {
+  var n = heap.length;
+
+  swap(heap, 1, n - 1);
+
+  heap.pop();
+
+  heapify(heap, n - 1, 1);
+}
+
+function swap(a, i, j) {
+  var temp = a[i];
+  a[i] = a[j];
+  a[j] = temp;
 }
