@@ -28,3 +28,18 @@ function isIsomorphic(s, t) {
 
   return true;
 }
+
+// 比较索引值
+function isIsomorphic(s, t) {
+  if (s.length !== t.length) {
+    return false;
+  }
+
+  for (var i = 0; i < s.length; i++) {
+    if (s.indexOf(s[i]) !== t.indexOf(t[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
