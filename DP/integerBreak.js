@@ -3,6 +3,24 @@
  * 2 <= n <= 58
  */
 
+// 递归
+function integerBreak1(n) {
+  var dfs = (n) => {
+    if (n === 1) {
+      return 1;
+    }
+    var res = Number.MIN_SAFE_INTEGER;
+
+    for (var i = 1; i < n; i++) {
+      res = Math.max(res, i * (n - i), i * dfs(n - i));
+    }
+
+    return res;
+  };
+
+  return dfs(n);
+}
+
 // 递归 & 记忆化搜索
 function integerBreak(n) {
   var memo = [];

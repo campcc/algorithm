@@ -14,8 +14,6 @@ function readBinaryWatch(turnedOn) {
     minutes = [0, 0, 0, 0, 1, 2, 4, 8, 16, 32];
 
   var dfs = (turnedOn, index, hour, minute) => {
-    console.log(hour, minute);
-
     if (hour > 11 || minute > 59) {
       return;
     }
