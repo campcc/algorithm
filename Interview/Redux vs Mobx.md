@@ -32,9 +32,9 @@
 1. Action：一个 JavaScript 对象，用来描述动作相关的信息，主要包含 type 和 payload
 2. Reducer：定义应用如何响应不同的动作（action），如何更新状态
 3. Store：来管理 action 和 reducer 及其关系的对象，主要提供以下功能
-   （1）维护应用状态并支持访问状态（getState()）
-   （2）支持监听 action 的分发，更新状态（dispatch(action)）
-   （3）支持订阅 store 的变更（subscribe(listener)）
+   - （1）维护应用状态并支持访问状态（getState()）
+   - （2）支持监听 action 的分发，更新状态（dispatch(action)）
+   - （3）支持订阅 store 的变更（subscribe(listener)）
 4. 异步流：由于 Redux 所有对 store 的更新，都约定通过 action 来触发，异步任务（通常是业务和获取数据）也不例外，为了不将业务和数据相关的任务混入 React 组件，就需要使用其他框架配合管理异步任务的流程，如 redux-thunk, redux-sage 等
 
 **Mobx 核心原理**
@@ -44,8 +44,8 @@ Mobx 是一个透明函数响应式编程（Transparently Functional Reactive Pr
 1. Action：与 Redux 的 action 不同，Mobx 的 action 是一个定义了改变状态的动作函数，包括如何去变更状态
 2. Store：集中管理状态（State）和动作（action）
 3. Derivation：衍生，从应用状态派生出的数据，主要分为两类，
-   （1）Computed Values（计算值）：计算值总是可以通过纯函数从从当前可观察的状态中获取
-   （2）Reactions（反应）：状态变更时需要自动发生的副作用，这种情况需要实现其读写操作
+   - （1）Computed Values（计算值）：计算值总是可以通过纯函数从从当前可观察的状态中获取
+   - （2）Reactions（反应）：状态变更时需要自动发生的副作用，这种情况需要实现其读写操作
 
 **函数式编程 & 面向对象**
 
