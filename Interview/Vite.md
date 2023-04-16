@@ -98,3 +98,14 @@ Vite 不同，Vite 利用浏览器对 ESM 的支持，先启动 Dev Server，拦
 
 1. 依赖模块设置响应头对其进行强缓存
 2. 源码文件状态码返回 304，减少不必要的数据传输
+
+**为什么需要预构建**
+
+1. 支持 cjs 依赖，将 cjs 文件转化为 esm 模块存入 node_modules/.vite
+2. 将类似 lodash 的工具库处理为一个 esm 依赖，减少模块请求和请求数量
+
+什么情况下执行预构建，
+
+1. package.json 中的 dependencies 变化
+2. 包管理器的 lockfile 变化
+3. 直接删掉 .vite 或着以 --force 启动
