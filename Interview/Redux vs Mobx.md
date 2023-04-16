@@ -72,3 +72,11 @@ Mobx 设计则是更多偏向于面向对象（OOP）和响应式编程（Reacti
 对于状态数据的特性而言，Redux 使用不可变对象，我们不能直接操作状态对象（state），而总是在原来 state 基础上返回一个新的 state，这样能很方便的返回应用的上一状态
 
 而 Mobx 中可以直接使用新值更新新状态对象
+
+**Mobx 核心实现**
+
+1. Object.defineProperty 或者 Proxy，在依赖属性的 getter 里进行依赖收集，然后在依赖属性出发 setter 时，将所有订阅了变化的函数都执行一边，从而实现响应式
+2. autorun 和 reactions 区别，都是在依赖属性变化时执行，autorun 会立即执行一次，reactions 不会
+3. Object.defineProperty 的问题？无法监听新添加的属性（比如数组的下标，动态添加的属性）
+4. computed 的原理？收集两次依赖，除了收集依赖了 computed 属性的方法外，同时收集依赖的属性
+5. mobx-react 实现原理？利用 React 的 render 方法执行来收集依赖，可以在 componentWillMount 里面注册 autorun
