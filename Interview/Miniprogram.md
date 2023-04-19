@@ -60,3 +60,57 @@ IOS 系统的 Safari 浏览器最早支持 -webkit-overflow-scrolling: touch，�
 2. 低代码自动生成页面
 
 **组件库**
+
+1. 规范，样式、前缀、git 提交、eslint、prettier
+2. 构建，dist、example、dumi、webapp；gulp 读取 example 和 src 进行转换，预发布文件夹固定前缀拷贝到 miniprogram_npm
+3. 小程序转 webapp，weweb、m2w
+4. CI/CD 流程，主分支提交触发智研构建，打包源码，在线文档和 webapp，webapp 通过 dumi headScript iframe 嵌入
+5. 发布流程，run 发布脚本，首先执行构建任务、自动执行 git commit & tnpm 发布，登录小程序后台完成示例小程序发布
+
+**dumi 原理**
+
+1. 基于 umi 生态的一个支持约定式路由，默认主题的 React 模板，收集 markdown 文件进行解析嵌入到路由页面
+2. 底层用的是 umi 生态的 father 进行构建，markdown 解析使用的是 remark-parse，读取 markdown 字符流解析为 html 字符串，然后通过 dangerouslySetInnerHTML 嵌入到页面
+
+**m2w 原理**
+
+1. 准备一个模板项目包含首页和 service 和 webview 引擎
+2. 读取 app.json 的 usingComponents，生成组件路由
+3. 组件的 wxml、wxss 使用 miniprogram-compiler 转成 jsString 嵌入到 webview
+4. js 使用 babel 转为 cjs 模块嵌入
+5. 启动 koa 服务器将打包好的静态文件部署
+
+**小程序原理**
+
+发展历史：WeixinJSBridge、JS-SDK、离线缓存、小程序
+
+背景：微信爆火后，微信中的 Webview 网页逐渐成为移动 Web 的一个重要入口
+
+1. 当时微信内部有一个叫 WeixinJSBridge 的库提供一些 API 给腾讯内部的一些业务使用，比如调用微信原生组件浏览图片；后来很多外部开发者发现之后，依葫芦画瓢地使用了，逐渐成为微信中网页的事实标准
+2. 于是 2015 年初，微信发布了一整套网页开发工具包叫 JS-SDK，开放了拍摄、支付、地图、分享等几十个 API；JS-SDK 解决了移动网页能力不足的问题，但没有解决体验问题，最常见的是当时用户访问网页前都会有一个白屏过程
+3. 针对这个问题微信团队设计了一个 JS-SDK 增强版本，引入了微信 Web 资源离线存储（类似于 HTML5 的 Application Cache，通过创建 manifest 支持离线缓存），借助微信的能力，支持直接从微信本地加载 Web 资源而不再需要从服务端拉取，从而减少网页加载时间；离线缓存能够解决一些问题，但是对于复杂的页面尤其是加载了大量 CSS 或者 JavaScript 文件的页面，白屏依旧存在并且缺少操作反馈，比如页面切换生硬、点击右迟滞感；
+4. 鉴于上面 JS-SDK 暴露的一些问题，微信重新设计了一个新的系统支持更快的加载、更强大的能力、媲美原生的体验，就是我们熟知的小程序
+
+小程序与网页开发的区别，
+
+1. 网页中渲染进程和 JavaScript 引擎是互斥的，小程序中两者是分开的，运行在不同的逻辑层和渲染层
+2. 小程序逻辑层运行在 JSCore 中，缺少 DOM 和 BOM 的一些 API，所以一些常见的 JQuery、Zepto 等库是无法在小程序中运行的，JSCore 与 NodeJS 环境也不尽相同，所以一些 NPM 包在小程序中也是无法运行的
+3. 网页开发面对的是各大浏览器，小程序开发面对的是两大操作系统的微信客户端以及开发者工具
+
+小程序架构，
+
+1. 双线程模型，通过微信客户端作为桥梁，链接 JSCore 逻辑层和 Webview 渲染层
+2. 框架的核心是一个响应的数据绑定系统，类似于 Web Work 与浏览器通信，只需要在逻辑层修改数据，视图层就会做相应的更新
+
+setData 原理，
+
+1. 逻辑层虚拟 DOM 树遍历和更新，触发组件生命周期和 observer 等
+2. 将变化数据从逻辑层传输到视图层，跨线程通信，需要进行序列反序列化，IOS 上是通过 evaluateJavascript 实现，还会有额外 JS 脚本解析和执行的耗时
+3. 视图层虚拟 DOM 树更新，真实 DOM 元素更新并触发页面渲染更新
+
+setData 优化，
+
+1. 非渲染相关数据不建议放 data 中
+2. 控制数据量大小，连续调用合并为一次，每次只传变化的数据，如只 set 数组中的某一项或对象的某个属性
+3. 页面切换后台后的更新操作，尽量避免后延迟到 onShow 执行，逻辑层是单线程，后台页面会抢占前台运行资源
+4. 组件化粒度控制，组件的 setData 只会引起当前组件和子组件的更新
