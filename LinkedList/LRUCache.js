@@ -35,6 +35,18 @@ var LRUCache = function (capacity) {
     this.dummyHead.next.prev = node;
     this.dummyHead.next = node;
   };
+
+  this.removeLast = function () {
+    var tail = this.popTail();
+    this.map.delete(tail.key);
+    this.count--;
+  };
+
+  this.popTail = function () {
+    var tail = this.dummyTail.prev;
+    this.removeNode(tail);
+    return tail;
+  };
 };
 
 LRUCache.prototype.get = function (key) {
@@ -58,7 +70,8 @@ LRUCache.prototype.put = function (key, value) {
       this.removeLast();
     }
 
-    var newNode = new ListNode(key, value)
-    this.map.
+    var newNode = new ListNode(key, value);
+    this.map.set(key, newNode);
+    this.count++;
   }
 };
