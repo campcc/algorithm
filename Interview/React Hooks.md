@@ -14,4 +14,4 @@
 14. mountChildFibers 与 reconcileChildFibers 的区别？后者会生成 effectTag
 15. completeWord 做了什么？判断 tag、判断 mount 还是 update，如果是 mount，为 Fiber 创建对应的 DOM 节点，然后将子孙 DOM 节点插入，接着处理 props 生成 effectList，update 时已经存在 DOM 节点，只需要 diff props 返回待更新的属性名列表即可，最终都会生成 effectList
 16. 什么是 effectList，为什么需要生成 effectList？effectList 是一个单向链表，保存了每个执行完 completeWork 并且存在 effectTag 的节点，这样在 commit 阶段只需要遍历一次 effectList 就能执行所有的 effect
-17. v18 开发环境 render 两次？
+17. v18 开发环境 render 两次？Strict Mode 情况下刻意为之，这是为了提醒开发者防止组件内有副作用带来 bug，props state 一致的情况下，render 两次结果应该是一致的，如果两次渲染结果不一致，说明代码可能有问题
