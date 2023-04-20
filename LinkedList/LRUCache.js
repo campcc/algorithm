@@ -7,29 +7,39 @@
  * 函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。
  */
 
+// dummyHead -> Node(1, 1) -> dummyTail
+
+function ListNode(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+  this.prev = null;
+}
+
 // 思路：双向链表 + 哈希
 var LRUCache = function (capacity) {
   this.capacity = capacity;
+  this.count = 0;
   this.map = new Map();
   this.dummyHead = new ListNode();
   this.dummyTail = new ListNode();
   this.dummyHead.next = this.dummyTail;
   this.dummyTail.prev = this.dummyHead;
-  this.count = 0;
 
   this.moveToHead = function (node) {
-    this.removeNode(node);
+    this.removeFromList(node);
     this.addToHead(node);
   };
 
-  this.removeNode = function (node) {
-    var prev = node.prev,
-      next = node.next;
+  this.removeFromList = function (node) {
+    var prev = node.prev;
+    var next = node.next;
     prev.next = next;
     next.prev = prev;
   };
 
   this.addToHead = function (node) {
+    // 插入到虚拟头节点和虚拟头节点的下一个节点之间
     node.prev = this.dummyHead;
     node.next = this.dummyHead.next;
     this.dummyHead.next.prev = node;
@@ -37,41 +47,36 @@ var LRUCache = function (capacity) {
   };
 
   this.removeLast = function () {
-    var tail = this.popTail();
-    this.map.delete(tail.key);
-    this.count--;
-  };
-
-  this.popTail = function () {
     var tail = this.dummyTail.prev;
-    this.removeNode(tail);
-    return tail;
+    this.map.delete(tail.key);
+    this.removeFromList(tail);
+    this.count--;
   };
 };
 
 LRUCache.prototype.get = function (key) {
-  var node = this.map.get(key);
-  if (node) {
+  if (this.map.has(key)) {
+    var node = this.map.get(key);
     this.moveToHead(node);
-    return node;
-  } else {
-    return -1;
+    return node.value;
   }
+  return -1;
 };
 
 LRUCache.prototype.put = function (key, value) {
   var node = this.map.get(key);
-  if (node) {
+
+  if (this.map.has(key)) {
     node.value = value;
     this.moveToHead(node);
   } else {
-    // 新数据，容量满了，删除链表最后一个节点
+    // 如果不存在，判断容量是否已满，如果满了删除最后一个节点
     if (this.count === this.capacity) {
       this.removeLast();
     }
-
     var newNode = new ListNode(key, value);
     this.map.set(key, newNode);
+    this.addToHead(newNode);
     this.count++;
   }
 };
