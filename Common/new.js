@@ -14,7 +14,7 @@ function _new(constructor, ...args) {
 // 方式2
 function _new() {
   var obj = Object.create(null);
-  var constructor = [].shift.call(arguments);
+  var constructor = Array.prototype.shift.call(arguments);
   Object.setPrototypeOf(obj, constructor.prototype);
   var result = constructor.apply(obj, arguments);
   return typeof result === "object" ? result : obj;

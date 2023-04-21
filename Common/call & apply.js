@@ -40,9 +40,6 @@ Function.prototype._call = function (context) {
   return result;
 };
 
-var res = foo._call(obj, 18);
-console.log(res);
-
 /**
  * 模拟 apply 实现
  */
@@ -62,5 +59,6 @@ Function.prototype._apply = function (context) {
   return result;
 };
 
-var res = foo._apply(obj, [18]);
-console.log(res);
+var res1 = foo._call(obj, 18);
+var res2 = foo._apply(obj, [18]);
+console.log(res1, res2);
