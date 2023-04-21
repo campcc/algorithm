@@ -30,5 +30,3 @@
 2. Last-modified 原理：一个时间戳，表示最后修改时间，随着资源第一次的响应头返回，随后每次请求带上 IF-Modified-Since 字段，值就是上一次返回的 Last-Modified，然后服务器判断是否一致，如果变化了，就会返回完整的响应内容，更新 Last-Modified 值，否则返回 304，不再添加 Last-Modified 字段
 3. Last-Modified 的问题：两个，一是编辑了文体但实质内容没有修改，二是 If-Modified-Since 只能检测 s 级的时间差，如果修改过快不会生效
 4. Etag 原理：由服务器为每个资源生成唯一标识符，通信原理与 Last-Modified 类似，下一次请求会带上 IF-Node-Match 字段，弊端是服务器开销
-
-**Cookie**
