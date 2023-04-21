@@ -22,7 +22,7 @@ foo.prototype.friend = "kevin";
 // 1. 返回的新函数可能有返回值
 // 2. bind 时支持传参，返回的函数依然支持传参，需要拼接两个 arguments
 // 3. 返回的新函数可以使用 new 进行实例化，此时绑定的 this 会失效，但传入的参数依然生效，需要将调用时 this 绑定为调用函数的 this
-// 4. 返回的新函数使用 new 实例化时，应该继承调用函数原型上的属性，我们需要在绑定时进行
+// 4. 返回的新函数使用 new 实例化时，应该继承调用函数原型上的属性，我们需要在绑定 this 的同时连接到调用函数的原型
 
 Function.prototype._bind = function (context) {
   if (typeof this !== "function") {
