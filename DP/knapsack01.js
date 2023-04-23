@@ -68,11 +68,9 @@ function knapsack01(w, v, c) {
     dp[i] = new Array(c + 1).fill(-1);
   }
 
-  dp[0][0] = 0;
-
   // 只考虑一个物品
-  for (var i = 1; i <= c; i++) {
-    dp[0][i] = v[0];
+  for (var j = 0; j <= c; j++) {
+    dp[0][j] = j >= w[0] ? v[0] : 0;
   }
 
   for (var i = 1; i < n; i++) {
@@ -85,6 +83,29 @@ function knapsack01(w, v, c) {
   }
 
   return dp[n - 1][c];
+}
+
+// 如何将空间复杂度优化到 O(C)
+// 下一行只依赖上一行的剩余重量对应的值，可以考虑从后往前填充
+function knapsack01(w, v, c) {
+  var n = w.length,
+    dp = new Array(c + 1).fill(-1);
+
+  if (n === 0) {
+    return 0;
+  }
+
+  for (var j = 0; j <= c; j++) {
+    dp[j] = j >= w[0] ? v[0] : 0;
+  }
+
+  for (var i = 1; i < n; i++) {
+    for (var j = c; j >= w[i]; j--) {
+      dp[j] = Math.max(dp[j], v[i] + dp[j - w[i]]);
+    }
+  }
+
+  return dp[c];
 }
 
 console.log(knapsack01([1, 2, 3], [6, 10, 12], 5));
