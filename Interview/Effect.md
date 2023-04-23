@@ -38,11 +38,36 @@ var source = [
   { id: 3, name: "d", pid: 1 },
   { id: 4, name: "e", pid: 2 },
   { id: 5, name: "f" },
-  { id: 6, name: "h" , pid: 5},
-  { id: 7, name: "i" , pid: 5},
+  { id: 6, name: "h", pid: 5 },
+  { id: 7, name: "i", pid: 5 },
   { id: 8, name: "j", pid: 6 },
-  { id: 9, name: "k" pid: 7},
+  { id: 9, name: "k", pid: 7 },
 ];
 
-function buildTree(array) {}
+function buildTree(data) {
+  var res = [];
+
+  for (var node of data) {
+    if (!node.hasOwnProperty("pid")) {
+      var children = generateChildren(node.id, data);
+      var treeNode = { ...node, children };
+      res.push(treeNode);
+    }
+  }
+
+  return res;
+}
+
+function generateChildren(id, data) {
+  var res = [];
+
+  for (var node of data) {
+    if (node.pid === id) {
+      var children = generateChildren(node.id, data);
+      res.push(children.length ? { ...node, children } : node);
+    }
+  }
+
+  return res;
+}
 ```
