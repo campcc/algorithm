@@ -85,4 +85,5 @@ function rob(nums) {
   return dp[n - 1];
 }
 
-console.log(rob([1, 2, 3, 1]));
+// 变种1：如果房屋围成了一圈
+function rob2(nums) {}
