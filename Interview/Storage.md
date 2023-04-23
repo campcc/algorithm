@@ -24,6 +24,12 @@ Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly
 3. HttpOnly，限制 Cookie 只能访问不能被 JavaScript 读取，可以减少 XSS 攻击带来的影响
 4. Expires & Max-Age，设置 Cooikie 的生命周期，过期后会被删除，与 HTTP 强缓存类似
 
+**Cookie 的使用场景**
+
+1. 会话状态管理（用户登录、购物车等信息）
+2. 个性化设置（用户自定义设置、主题）
+3. 浏览器行为跟踪（跟踪分析用户行为）
+
 **LocalStorage & SessionStorage**
 
 Web Storage 是 HTML5 提供的浏览器数据存储机制，分为 LocalStorage 和 SessionStorage，
