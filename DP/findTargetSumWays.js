@@ -43,7 +43,7 @@ function findTargetSumWays(nums, target) {
     sum += num;
   }
 
-  if (target > sum) {
+  if (Math.abs(target) > sum) {
     return 0;
   }
 
