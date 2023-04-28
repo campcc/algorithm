@@ -66,3 +66,14 @@ A.prototype = {};
 var b = Object.create(tmp);
 console.log(a instanceof A); // false, a 的 __proto__ 仍然指向 temp，A 的原型对象被修改为新的 {}
 console.log(b instanceof A); // b 的原型对象为 temp，A 的原型对象被修改为新的 {}
+
+// delete
+const Book = {
+  price: 32,
+};
+const book = Object.create(Book);
+book.type = "Math"; // book.__proto___ { type: "Math", prototype: { price: 32 } }
+delete book.price; // 无效
+delete book.type;
+console.log(book.price); // 32
+console.log(book.type); // undefiend
