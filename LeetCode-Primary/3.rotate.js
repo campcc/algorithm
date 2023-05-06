@@ -4,7 +4,7 @@
  */
 
 // 使用额外的数组
-function rotate(nums) {
+function rotate(nums, k) {
   var n = nums.length,
     temp = new Array(n);
 
@@ -20,8 +20,9 @@ function rotate(nums) {
 // 旋转 k 次后，尾部的 k 个元素会移动至头部，其余元素会后移 k 个位置，因此我们可以考虑将数组翻转三次，先翻转所有元素，再翻转 [0, k - 1]，再翻转 [k, n - 1]
 // k 可能大于 n，需要注意对 k 进行取模处理
 function rotate(nums, k) {
-  var n = nums.length,
-    k = k % n;
+  var n = nums.length;
+
+  k = k % n;
 
   reverse(nums, 0, n - 1);
   reverse(nums, 0, k - 1);
